@@ -40,8 +40,6 @@ def login():
     return "Invalid form submission."
 
 if __name__ == '__main__':
-    # Run the app on port 8080
-    app.run(debug=True, port=8081)   
-
-
+    # Run on Render's required port 10000 with 0.0.0.0
+    app.run(host='0.0.0.0', port=10000, debug=False)  # DEBUG MUST BE FALSE FOR PRODUCTION!
 
